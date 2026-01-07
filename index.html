@@ -69,6 +69,36 @@ li {
   margin-top: 10px;
   color: #00ff88;
 }
+.aviso {
+  background: #1c1c1c;
+  border: 1px solid #00ff88;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 15px;
+  max-width: 600px;
+}
+
+.colores {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.colores span {
+  width: 25px;
+  height: 6px;
+  border-radius: 5px;
+}
+
+.amarillo { background: #ffd700; }
+.azul { background: #1e90ff; }
+.rojo { background: #ff3b3b; }
+
+.aviso p {
+  font-size: 12px;
+  color: #eaeaea;
+  margin: 0;
+}
 
 /* BOTÓN DRIVE */
 .drive-btn {
@@ -86,7 +116,19 @@ li {
 </head>
 
 <body>
-
+<div class="aviso">
+  <div class="colores">
+    <span class="amarillo"></span>
+    <span class="azul"></span>
+    <span class="rojo"></span>
+  </div>
+  <p>
+    No te preocupes, no temas esta vez.  
+    Todo lo que entra y sale de aquí nadie lo sabe y nunca lo sabrá.  
+    Cuida tu privacidad y oculta tus datos al subir evidencias.
+  </p>
+</div>
+ 
 <a class="drive-btn" href="PEGA_AQUI_TU_LINK_DE_DRIVE" target="_blank">
 📤 Subir evidencias
 </a>
@@ -162,4 +204,5 @@ cargar();
 
 </body>
 </html>
+
 
