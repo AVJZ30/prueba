@@ -2,22 +2,102 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Notas Públicas Anónimas</title>
+<title>Notas Públicas</title>
+
 <style>
-body { font-family: Arial; background:#f4f4f4; padding:20px }
-textarea { width:100%; height:80px }
-button { padding:10px; margin-top:5px }
-li { background:white; margin:5px 0; padding:10px; border-radius:5px }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f0f0f;
+  color: white;
+  padding: 20px;
+}
+
+h2 {
+  color: #00ff88;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  background: #1c1c1c;
+  color: white;
+  border: 1px solid #00ff88;
+  border-radius: 5px;
+}
+
+textarea {
+  height: 80px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px;
+  background: #00ff88;
+  border: none;
+  color: black;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #00cc6e;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #1c1c1c;
+  border-left: 5px solid #00ff88;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.nombre {
+  color: #00ff88;
+  font-weight: bold;
+}
+
+#mensajeOk {
+  display: none;
+  margin-top: 10px;
+  color: #00ff88;
+}
+
+/* BOTÓN DRIVE */
+.drive-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #00ff88;
+  color: black;
+  padding: 10px 15px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: bold;
+}
 </style>
 </head>
 
 <body>
 
+<a class="drive-btn" href="PEGA_AQUI_TU_LINK_DE_DRIVE" target="_blank">
+📤 Subir evidencias
+</a>
+
 <h2>📝 Notas públicas anónimas</h2>
 
-<textarea id="nota" placeholder="Escribe algo..."></textarea>
-<br>
+<input id="nombre" placeholder="Nombre (opcional)">
+<textarea id="nota" placeholder="Escribe tu mensaje..."></textarea>
 <button onclick="guardar()">Publicar</button>
+
+<div id="mensajeOk">✅ Publicado correctamente</div>
 
 <ul id="lista"></ul>
 
@@ -26,36 +106,40 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebas
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-/* 🔑 TUS DATOS (YA LOS TIENES) */
 const firebaseConfig = {
   apiKey: "AIzaSyA28ieu5X3SbY-_1XJoPlZF7mcU67xrfls",
   authDomain: "prueba-d573b.firebaseapp.com",
   projectId: "prueba-d573b"
 };
 
-/* 🚀 INICIAR FIREBASE */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
 
-/* 👤 LOGIN ANÓNIMO */
 signInAnonymously(auth);
 
-/* ✍️ GUARDAR NOTA */
 window.guardar = async function () {
   const texto = document.getElementById("nota").value;
+  const nombre = document.getElementById("nombre").value || "Anónimo";
+
   if (texto.trim() === "") return;
 
   await addDoc(collection(db, "notas"), {
     texto: texto,
+    nombre: nombre,
     fecha: new Date()
   });
 
   document.getElementById("nota").value = "";
+  document.getElementById("nombre").value = "";
+
+  const msg = document.getElementById("mensajeOk");
+  msg.style.display = "block";
+  setTimeout(() => msg.style.display = "none", 2000);
+
   cargar();
 }
 
-/* 📥 CARGAR NOTAS */
 async function cargar() {
   const lista = document.getElementById("lista");
   lista.innerHTML = "";
@@ -65,7 +149,10 @@ async function cargar() {
 
   datos.forEach(doc => {
     const li = document.createElement("li");
-    li.textContent = doc.data().texto;
+    li.innerHTML = `
+      <span class="nombre">${doc.data().nombre}</span><br>
+      ${doc.data().texto}
+    `;
     lista.appendChild(li);
   });
 }
@@ -75,3 +162,4 @@ cargar();
 
 </body>
 </html>
+
